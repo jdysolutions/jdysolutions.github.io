@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JDY SOLUTIONS SRL — Sisteme, Software & Servicii Profesionale</title>
+  <meta name="description" content="JDY SOLUTIONS SRL — design și dezvoltare de sisteme informatice, arhitecturi cloud, aplicații web și integrare R&D pentru clienți enterprise din București și UE." />
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* ====== Design sistem (fără dependențe externe, conform cerințelor review) ====== */
+    :root{
+      --bg:#0f1115;           /* fundal închis pentru hero */
+      --card:#161a22;         /* carduri */
+      --muted:#8b90a1;        /* text secundar */
+      --text:#f3f5f9;         /* text pe fundal închis */
+      --brand:#ff6a3d;        /* accent cald */
+      --brand-2:#36c2ff;      /* accent rece */
+      --ring:rgba(255,106,61,.35);
+      --surface:#f6f7fb;      /* fundal secțiuni deschise */
+      --ink:#1a1d29;          /* text pe fundal deschis */
+      --ok:#2ecc71;
+      --danger:#ff4757;
+      --radius:18px;
+      --shadow:0 8px 30px rgba(0,0,0,.18);
+      --maxw:1200px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+      color:var(--ink);
+      background:var(--surface);
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:var(--maxw);margin-inline:auto;padding:0 24px}
+
+    /* ====== Navbar ====== */
+    header{
+      position:fixed; inset-inline:0; top:0; z-index:50;
+      backdrop-filter:saturate(180%) blur(8px);
+      background:linear-gradient(to bottom, rgba(15,17,21,.75), rgba(15,17,21,.35));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      height:64px; color:var(--text);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.3px;
+    }
+    .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--brand)}
+    .menu{display:flex; gap:22px; align-items:center}
+    .menu a{opacity:.9}
+    .menu a:hover{opacity:1}
+    .btn{
+      appearance:none; border:0; border-radius:999px; padding:10px 16px; cursor:pointer;
+      background:var(--brand); color:white; font-weight:600; box-shadow:0 8px 20px var(--ring);
+      transition:.25s transform, .25s box-shadow, .25s background;
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow:0 10px 30px var(--ring)}
+    .btn.alt{background:transparent; border:1px solid rgba(255,255,255,.25)}
+    .btn.light{background:var(--ink); color:var(--text)}
+    .btn.ghost{background:transparent; border:1px solid rgba(26,29,41,.12); color:var(--ink)}
+    .chip{display:inline-flex; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.15); color:#fff; font-size:12px; letter-spacing:.3px}
+
+    /* ====== Hero ====== */
+    .hero{
+      position:relative; background:var(--bg); color:var(--text);
+      min-height:86vh; display:grid; place-items:center; padding-top:64px; overflow:hidden;
+    }
+    .hero::before{
+      content:""; position:absolute; inset:0;
+      background-image: url('main.jpg');   /* >>> puneți aici imaginea locală main.jpg <<< */
+      background-size:cover; background-position:center;
+      filter:grayscale(.3) contrast(1.05) brightness(.7);
+      transform:scale(1.02);
+    }
+    .hero::after{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(1200px 600px at 20% 20%, rgba(54,194,255,.18), transparent 60%),
+        radial-gradient(1200px 600px at 80% 30%, rgba(255,106,61,.18), transparent 60%),
+        linear-gradient(to bottom, rgba(15,17,21,.3), rgba(15,17,21,.6) 55%, rgba(15,17,21,.9));
+      pointer-events:none;
+    }
+    .hero-inner{position:relative; z-index:1; display:grid; gap:28px}
+    .hero h1{
+      font-size:clamp(36px, 6vw, 68px); line-height:1.05; margin:0;
+      letter-spacing:-.5px; max-width:13ch;
+    }
+    .hero p{max-width:62ch; margin:0; opacity:.9}
+    .hero .cta{display:flex; gap:12px; flex-wrap:wrap}
+    .badges{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .stack{display:flex; gap:8px; align-items:center}
+    .stack span{font-size:13px; opacity:.85}
+    .logos{display:grid; grid-template-columns:repeat(6,1fr); gap:18px; opacity:.85}
+    .logo{
+      border-radius:12px; padding:10px 12px; background:rgba(255,255,255,.08); text-align:center; font-weight:600; font-size:13px;
+    }
+
+    /* ====== Secțiuni ====== */
+    section{padding:86px 0}
+    .section-title{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px}
+    .eyebrow{letter-spacing:.32em; text-transform:uppercase; font-size:12px; color:var(--muted)}
+    h2{margin:6px 0 0; font-size:clamp(28px, 4vw, 42px); letter-spacing:-.2px}
+    .lead{max-width:78ch; color:#4a5062}
+
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+    .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:18px}
+    .card{
+      background:linear-gradient(180deg, #ffffff, #f7f8fc);
+      border:1px solid rgba(26,29,41,.06);
+      border-radius:var(--radius);
+      padding:22px; box-shadow:var(--shadow);
+    }
+    .card.dark{background:linear-gradient(180deg, #151925, #0f131d); color:var(--text); border-color:rgba(255,255,255,.06)}
+    .card .kicker{font-size:12px; text-transform:uppercase; letter-spacing:.32em; color:var(--muted)}
+    .card h3{margin:.4rem 0 0; font-size:22px}
+    .card p{margin:.6rem 0 0}
+    .icon{
+      width:42px; height:42px; border-radius:12px; display:grid; place-items:center; font-weight:800;
+      background:linear-gradient(135deg, var(--brand), var(--brand-2)); color:#fff; box-shadow:0 10px 24px rgba(54,194,255,.25);
+    }
+    .list{display:grid; gap:10px; padding-left:18px}
+    .list li{margin-left:8px}
+    .tick:before{
+      content:"✓"; display:inline-block; margin-right:8px; color:var(--ok); font-weight:800;
+    }
+
+    /* ====== CTA band ====== */
+    .cta-band{
+      background:linear-gradient(90deg, rgba(54,194,255,.08), rgba(255,106,61,.08));
+      border:1px solid rgba(26,29,41,.08);
+      border-radius:var(--radius);
+      display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; margin-top:22px;
+    }
+
+    /* ====== Footer ====== */
+    footer{padding:42px 0 80px; color:#646b7d}
+    .foot{display:flex; gap:18px; justify-content:space-between; align-items:center; flex-wrap:wrap}
+    .small{font-size:13px}
+
+    /* ====== Modale (formular + succes) ====== */
+    .backdrop{
+      position:fixed; inset:0; background:rgba(6,8,12,.6);
+      display:none; align-items:center; justify-content:center; z-index:70;
+    }
+    .backdrop[data-open="true"]{display:flex}
+    .modal{
+      width:min(680px, 92vw); background:#fff; color:var(--ink); border-radius:20px; padding:10px; box-shadow:0 40px 120px rgba(0,0,0,.35);
+      outline:none;
+    }
+    .modal header{
+      position:static; backdrop-filter:none; background:transparent; border:0;
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between; padding:12px 14px 0 14px;
+    }
+    .modal .body{padding:0 14px 14px}
+    .x{
+      background:transparent; border:0; cursor:pointer; font-size:22px; line-height:1; padding:6px 10px; border-radius:8px;
+    }
+    .x:hover{background:rgba(26,29,41,.06)}
+    form{display:grid; gap:12px}
+    label{font-weight:600}
+    input, textarea{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(26,29,41,.12); background:#fff;
+      font:inherit; color:inherit; outline:none;
+    }
+    textarea{min-height:140px; resize:vertical}
+    input:focus, textarea:focus{border-color:var(--brand-2); box-shadow:0 0 0 4px rgba(54,194,255,.15)}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .help{font-size:12px; color:#697083}
+    .error{color:var(--danger); font-size:13px; display:none}
+    .ok{color:var(--ok)}
+    .center{display:flex; justify-content:center; align-items:center}
+    .sr-only{position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* ====== Responsive ====== */
+    @media (max-width:960px){
+      .grid-3{grid-template-columns:1fr 1fr}
+      .logos{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width:720px){
+      .grid-2,.grid-3{grid-template-columns:1fr}
+      .hero h1{max-width:100%}
+      .row{grid-template-columns:1fr}
+    }
+
+    /* Respectă accesibilitatea pentru preferințe de mișcare */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn, a{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- ====== Navigație ====== -->
+  <header aria-label="Navigație primară">
+    <div class="container nav">
+      <div class="brand" aria-label="JDY SOLUTIONS identitate">
+        <span class="dot" aria-hidden="true"></span>
+        <span>JDY SOLUTIONS SRL</span>
+      </div>
+      <nav class="menu" aria-label="Meniu">
+        <a href="#acasa">Acasă</a>
+        <a href="#despre">Studio</a>
+        <a href="#servicii">Servicii</a>
+        <a href="#de-ce-noi">De ce noi</a>
+        <a href="#proces">Proces</a>
+        <button class="btn alt" data-open-modal="contact">Contact</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ====== Hero ====== -->
+  <section id="acasa" class="hero" aria-label="Ecran principal">
+    <div class="container hero-inner">
+      <div class="badges">
+        <span class="chip">Sisteme • Cloud • UX • R&D</span>
+        <div class="stack"><div class="chip" aria-hidden="true">ISO-ready</div><span>Respectă bune practici de confidențialitate</span></div>
+      </div>
+      <h1>Studio creativ de inginerie software pentru companii exigente.</h1>
+      <p>Concepem, proiectăm și implementăm **sisteme informatice** scalabile pentru branduri care vor
+        să reducă timpul de lansare, să crească siguranța datelor și să transforme experiența digitală
+        în rezultate măsurabile.</p>
+      <div class="cta">
+        <button class="btn" data-open-modal="contact">Solicită o consultanță</button>
+        <a class="btn alt" href="#servicii" aria-label="Vezi serviciile">Vezi serviciile</a>
+      </div>
+
+      <div class="cta-band" role="note" aria-label="Clienți și tehnologii">
+        <div class="logos" aria-hidden="true">
+          <div class="logo">K8s</div><div class="logo">AWS</div><div class="logo">GCP</div>
+          <div class="logo">Azure</div><div class="logo">React</div><div class="logo">.NET</div>
+        </div>
+        <div class="small">„De la 0 la 1”: arhitectură, prototipare, dezvoltare, observabilitate, mentenanță.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== DESPRE NOI ====== -->
+  <section id="despre" aria-labelledby="titlu-despre">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Cine suntem</div>
+          <h2 id="titlu-despre">Despre JDY SOLUTIONS</h2>
+        </div>
+        <p class="lead">Birou tehnic din București care combină product design, inginerie și știință
+           aplicată pentru a construi produse sigure și ușor de folosit.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <p><strong>JDY SOLUTIONS SRL</strong> este un studio de <em>Computer Systems Design</em> specializat
+            în proiectarea de arhitecturi cloud-native și platforme de date pentru companii din UE. Lucrăm
+            cu procese transparente, documentație riguroasă și iterații scurte.</p>
+          <p>Optimizăm infrastructuri existente, modernizăm aplicații monolit în servicii, definim pipeline-uri CI/CD
+            cu audit trail și observabilitate by design.</p>
+          <p>Abordarea noastră este <strong>user-centric</strong>: începem cu obiective de business, traducem în
+            cerințe măsurabile și livrăm increment pe increment pentru a limita riscurile.</p>
+          <p>Ne aliniem standardelor din industrii reglementate (financiar, sănătate), implementând control
+            al accesului, criptare end-to-end și retenție minimă de date.</p>
+          <p>Sediul nostru: <em>STR. STRADUINTEI NR.1A CAMERA 1 ET.1 AP.3 SECTORUL 4 010011, București</em>.
+            E-mail: <a href="mailto:info@jdysolutions.pro">info@jdysolutions.pro</a>.</p>
+        </article>
+        <aside class="card dark">
+          <div class="kicker">Fapte & rezultate</div>
+          <h3>Impact măsurabil</h3>
+          <ul class="list">
+            <li class="tick">Reducere cu 40% a timpului de livrare prin pipeline-uri automatizate și testare continuă.</li>
+            <li class="tick">99.95% disponibilitate pentru aplicații cu auto-scalare și planuri de failover.</li>
+            <li class="tick">Migrare zero-downtime pentru sisteme critice, cu rollback validat.</li>
+            <li class="tick">Observabilitate completă: logging corelat, tracing distribuit, alerte semantice.</li>
+            <li class="tick">Procese <abbr title="Privacy by Design">PbD</abbr>: minimizare, consimțământ explicit, transparență.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== SERVICII ====== -->
+  <section id="servicii" aria-labelledby="titlu-serv">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Ce facem</div>
+          <h2 id="titlu-serv">Soluții care transformă idei în produse</h2>
+        </div>
+        <p class="lead">Trei direcții prin care accelerăm inițiative digitale — de la strategie la cod rulând în producție.</p>
+      </div>
+
+      <div class="grid-3" role="list">
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden="true">1</div>
+          <h3>Arhitectură & Cloud-Native</h3>
+          <p>Definim arhitecturi scalabile pe AWS/GCP/Azure, folosind containere, orchestrare și „12-factor app”.</p>
+          <p>Stabilim standarde de securitate, politici IAM și rețele zero-trust. Realizăm landing zones și DR playbook.</p>
+          <p>Documentăm deciziile (ADR) și modelăm costurile pentru a evita surprize în exploatare.</p>
+        </article>
+
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden="true">2</div>
+          <h3>Produse Web & UX Engineering</h3>
+          <p>Concepeam interfețe rapide, accesibile și frumoase, cu React/TypeScript și design system unitar.</p>
+          <p>Integrăm API-uri, autentificare modernă și telemetrie. Respectăm WCAG 2.2 și criterii de performanță Core Web Vitals.</p>
+          <p>Livrăm prototipuri interactive pentru validare timpurie și reducerea riscului de dezvoltare.</p>
+        </article>
+
+        <article class="card" role="listitem">
+          <div class="icon" aria-hidden="true">3</div>
+          <h3>Date, Integrare & Observabilitate</h3>
+          <p>Proiectăm modele de date, ETL/ELT și evenimente; alegem stocări potrivite scopului (SQL/NoSQL).</p>
+          <p>Legăm sisteme disparate prin gateway-uri robuste, cozi de mesaje și contracte versionate.</p>
+          <p>Implementăm logging corelat și APM, pentru cauzalitate clară și incident-response eficient.</p>
+        </article>
+      </div>
+
+      <div class="cta-band" aria-live="polite">
+        <div><strong>Ai un MVP de lansat?</strong> Pornim cu un sprint de 10 zile: audit, backlog, prototip interactiv.</div>
+        <button class="btn light" data-open-modal="contact">Începe discuția</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== DE CE NOI (Avantaje) ====== -->
+  <section id="de-ce-noi" aria-labelledby="titlu-noi">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">De ce JDY SOLUTIONS</div>
+          <h2 id="titlu-noi">Partener de încredere, nu doar furnizor</h2>
+        </div>
+        <p class="lead">Trei diferențiatori care țin proiectele pe șine și reduc riscurile operaționale.</p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>Transparență operațională</h3>
+          <p>Lucrăm în iterații scurte, cu demo la fiecare sprint, backlog vizibil și metrici de calitate (test coverage, MTTR).</p>
+          <p>Contracte clare, SLA măsurabile și drepturi de proprietate intelectuală bine definite.</p>
+        </article>
+        <article class="card">
+          <h3>Siguranță & confidențialitate</h3>
+          <p>Colectăm minimul necesar de date; nu folosim SDK-uri de tracking. Criptăm în tranzit și la repaus, cu rotație chei.</p>
+          <p>Politică de confidențialitate simplă, control granular al consimțământului și jurnal de acces.</p>
+        </article>
+        <article class="card">
+          <h3>Calitate verificabilă</h3>
+          <p>Automatizăm testele (unitare, contract, e2e), rulează în CI pentru fiecare schimbare.</p>
+          <p>Observabilitate și feature flags pentru lansări controlate, fără întreruperi.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PROCES ====== -->
+  <section id="proces" aria-labelledby="titlu-proces">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Cum lucrăm</div>
+          <h2 id="titlu-proces">„0 → 1” în trei pași clari</h2>
+        </div>
+        <p class="lead">O metodă pragmatică: înțelegere, construcție, scalare. Fără promisiuni vagi.</p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <div class="icon" aria-hidden="true">A</div>
+          <h3>Descoperire & plan</h3>
+          <p>Ateliere cu stakeholderi, inventar de sisteme, definire KPI. Livrăm o foaie de parcurs cu riscuri și costuri.</p>
+        </article>
+        <article class="card">
+          <div class="icon" aria-hidden="true">B</div>
+          <h3>Build incremental</h3>
+          <p>Prototipare, design system, microservicii/monolit modular, pipeline CI/CD și medii paritate-prod.</p>
+        </article>
+        <article class="card">
+          <div class="icon" aria-hidden="true">C</div>
+          <h3>Scalare & operare</h3>
+          <p>Observabilitate, SLO-uri, securitate continuă, cost management și transfer de cunoștințe către echipa ta.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FORMULAR CONTACT (modale) ====== -->
+  <div class="backdrop" id="modal-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title" aria-describedby="contact-desc" data-open="false">
+    <div class="modal" tabindex="-1">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">Spune-ne despre proiect</div>
+          <h2 id="contact-title" style="margin:6px 0 0">Contactează-ne</h2>
+          <p id="contact-desc" class="small">Nu solicităm număr de telefon. Te vom contacta strict pe e-mail, conform preferințelor tale.</p>
+        </div>
+        <button class="x" type="button" data-close aria-label="Închide">×</button>
+      </div>
+      <div class="body">
+        <form id="form" novalidate>
+          <div class="row">
+            <div>
+              <label for="nume">Nume complet</label>
+              <input id="nume" name="nume" autocomplete="name" placeholder="Ex.: Andrei Pop" required />
+              <div class="error" id="err-nume">Te rugăm să introduci numele.</div>
+            </div>
+            <div>
+              <label for="email">Email de lucru</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="nume@companie.ro" required />
+              <div class="error" id="err-email">Adresa de e-mail nu pare validă.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="companie">Companie</label>
+              <input id="companie" name="companie" autocomplete="organization" placeholder="Ex.: JDY Ventures SA" />
+            </div>
+            <div>
+              <label for="subiect">Subiect</label>
+              <input id="subiect" name="subiect" placeholder="Modernizare platformă, MVP, audit etc." required />
+              <div class="error" id="err-subiect">Precizează un subiect scurt.</div>
+            </div>
+          </div>
+
+          <div>
+            <label for="mesaj">Mesaj</label>
+            <textarea id="mesaj" name="mesaj" placeholder="Context, obiective, constrângeri, termene. Links opționale."></textarea>
+          </div>
+
+          <label class="small">
+            <input type="checkbox" id="consent" required />
+            Sunt de acord ca JDY SOLUTIONS să îmi prelucreze datele pentru a răspunde solicitării. Datele nu sunt folosite în scopuri de marketing.
+          </label>
+          <div class="error" id="err-consent">Este necesar consimțământul tău.</div>
+
+          <div class="help">Prin trimitere, mesajul tău va fi livrat la <strong>info@jdysolutions.pro</strong>.
+            Nu stocăm datele din formular mai mult decât este necesar pentru răspuns.</div>
+
+          <div class="center">
+            <button class="btn" type="submit" aria-label="Trimite mesajul">Trimite mesajul</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== MODAL SUCCES ====== -->
+  <div class="backdrop" id="modal-success" role="alertdialog" aria-modal="true" aria-labelledby="succ-title" aria-describedby="succ-desc" data-open="false">
+    <div class="modal" tabindex="-1">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">Mulțumim!</div>
+          <h2 id="succ-title" style="margin:6px 0 0">Mesajul a fost trimis</h2>
+          <p id="succ-desc" class="small">Îți vom răspunde pe e-mail în cel mai scurt timp. Între timp poți salva această pagină sau să revii la secțiunile de mai jos.</p>
+        </div>
+        <button class="x" type="button" data-close aria-label="Închide">×</button>
+      </div>
+      <div class="body center">
+        <a class="btn ghost" href="#acasa">Înapoi la început</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== CONTACT ====== -->
+  <section id="contact" aria-labelledby="titlu-contact">
+    <div class="container">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">Rămânem în legătură</div>
+          <h2 id="titlu-contact">Contact</h2>
+        </div>
+        <p class="lead">Preferăm comunicarea scrisă și ședințele programate. Nu solicităm date sensibile. Folosește formularul sau scrie direct pe e-mail.</p>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Adresă</h3>
+          <p>STR. STRADUINTEI NR.1A, CAMERA 1, ET.1, AP.3, SECTORUL 4, 010011, București</p>
+          <p><strong>E-mail:</strong> <a href="mailto:info@jdysolutions.pro">info@jdysolutions.pro</a></p>
+          <p class="small">Nu avem un call center. Pentru accesibilitate, putem organiza sesiuni online cu subtitrare.</p>
+          <button class="btn" data-open-modal="contact">Deschide formularul</button>
+        </article>
+
+        <aside class="card">
+          <h3>Politică de confidențialitate (pe scurt)</h3>
+          <ul class="list">
+            <li>Colectăm doar ce scrii în formular și adresa ta de e-mail.</li>
+            <li>Scop exclusiv: a răspunde mesajului.</li>
+            <li>Nu partajăm datele cu terți în scop de marketing.</li>
+            <li>Poți cere oricând ștergerea datelor trimițând un e-mail la adresa noastră.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer aria-label="Subsol">
+    <div class="container foot">
+      <div class="small">© <span id="y"></span> JDY SOLUTIONS SRL — Professional, Scientific & Technical Services</div>
+      <div class="small">Fără cookie-uri de tracking. Compatibil cu revizuirea App Store / Apple.</div>
+    </div>
+  </footer>
+
+  <script>
+  /* ====== JS: accesibilitate, smooth scroll, modale, validare bazică (fără tracking) ====== */
+
+  // Anul curent
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Deschidere / închidere modale
+  const modalContact = document.getElementById('modal-contact');
+  const modalSuccess = document.getElementById('modal-success');
+
+  function openModal(el){
+    el.setAttribute('data-open','true');
+    const focusable = el.querySelector('button,[href],input,textarea,[tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(el){
+    el.setAttribute('data-open','false');
+    document.body.style.overflow='';
+  }
+
+  document.querySelectorAll('[data-open-modal="contact"]').forEach(btn=>{
+    btn.addEventListener('click', ()=>openModal(modalContact));
+  });
+  document.querySelectorAll('[data-close]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      closeModal(modalContact);
+      closeModal(modalSuccess);
+    });
+  });
+  [modalContact, modalSuccess].forEach(backdrop=>{
+    backdrop.addEventListener('click', (e)=>{
+      if(e.target === backdrop){ closeModal(backdrop); }
+    });
+  });
+  window.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){
+      closeModal(modalContact);
+      closeModal(modalSuccess);
+    }
+  });
+
+  // Smooth scroll pentru linkuri interne (fallback dacă preferă mișcare redusă)
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(target){
+        e.preventDefault();
+        const y = target.getBoundingClientRect().top + window.scrollY - 56;
+        window.scrollTo({top:y, behavior: prefersReduced ? 'auto' : 'smooth'});
+        target.setAttribute('tabindex','-1'); target.focus({preventScroll:true});
+      }
+    });
+  });
+
+  // Validare simplă + „trimitere” simulată (fără rețea; conform revizuirii Apple)
+  const form = document.getElementById('form');
+  function show(id, ok){ const el=document.getElementById(id); if(!el) return; el.style.display = ok ? 'none' : 'block'; }
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const nume = document.getElementById('nume').value.trim();
+    const subiect = document.getElementById('subiect').value.trim();
+    const consent = document.getElementById('consent').checked;
+
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    show('err-email', emailValid);
+    show('err-nume', nume.length > 1);
+    show('err-subiect', subiect.length > 1);
+    show('err-consent', consent);
+
+    if(emailValid && nume.length>1 && subiect.length>1 && consent){
+      // aici, într-un proiect real, s-ar face un POST securizat către backend
+      closeModal(modalContact);
+      openModal(modalSuccess);
+      form.reset();
+    }
+  });
+  </script>
+
+  <!--
+    Notă pentru implementare:
+    • Înlocuiți 'main.jpg' cu o fotografie tematică (studio tech, birou modern, hardware/UX).
+    • Păstrați această pagină fără scripturi de tracking sau câmpuri sensibile.
+    • Pentru backend, folosiți un endpoint securizat și evitați stocarea nejustificată a datelor.
+  -->
+</body>
+</html>
